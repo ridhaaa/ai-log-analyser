@@ -11,6 +11,12 @@ jobs:
       - name: 'Checkout Github Action'
         uses: actions/checkout@v4
 
+      # 1. This is the new step using your JSON secret
+      - name: 'Azure Login'
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
       - name: 'Login to Azure Container Registry'
         uses: azure/docker-login@v2
         with:
@@ -27,5 +33,5 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'health-monitor-app'
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          # 2. Removed publish-profile since it's disabled in your Azure
           images: 'healthmonitorreg.azurecr.io/health-monitor-app:${{ github.sha }}'
